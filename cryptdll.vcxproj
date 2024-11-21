@@ -51,7 +51,7 @@
     <TargetName>cryptopp</TargetName>
     <TargetExt>.dll</TargetExt>
     <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <OutDir>$(Platform)\DLL_Output\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
@@ -61,11 +61,11 @@
     <ClCompile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ErrorReporting>None</ErrorReporting>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4231; 4251; 4275; 4355; 4505</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>$(AdditionalOptions) /we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <ErrorReporting>NoErrorReport</ErrorReporting>
@@ -81,32 +81,34 @@
   <!-- Debug Configurations -->
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'" Label="Debug Configuration">
     <ClCompile>
-      <PreprocessorDefinitions>CRYPTOPP_EXPORTS;CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2=1;USE_PRECOMPILED_HEADERS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_CRYPTDLL_VCXPROJ;CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2=1;CRYPTOPP_EXPORTS;USE_PRECOMPILED_HEADERS;WIN32_LEAN_AND_MEAN</PreprocessorDefinitions>
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalOptions>/we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_CRYPTDLL_VCXPROJ;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <!-- Release Configurations -->
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'" Label="Release Configuration">
     <ClCompile>
-      <PreprocessorDefinitions>NDEBUG;CRYPTOPP_EXPORTS;CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2=1;USE_PRECOMPILED_HEADERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;NOMINMAX;_CRYPTDLL_VCXPROJ;CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2=1;CRYPTOPP_EXPORTS;USE_PRECOMPILED_HEADERS;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;NOMINMAX;_CRYPTDLL_VCXPROJ;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
@@ -118,6 +120,7 @@
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'" Label="X86 Configuration">
     <ClCompile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -148,20 +151,16 @@
   <ItemDefinitionGroup Condition="!Exists('Win32\Output\Debug\cryptest.exe')" Label="MAC tool">
     <PreBuildEvent>
       <Message>Creating Win32/Debug cryptest.exe for MAC computation</Message>
-      <Command>
-        msbuild /t:Build /p:Configuration=Debug;Platform=Win32 cryptlib.vcxproj
-        msbuild /t:Build /p:Configuration=Debug;Platform=Win32 cryptest.vcxproj
-      </Command>
+      <Command>msbuild /t:Build /p:Configuration=Debug;Platform=Win32 cryptlib.vcxproj
+msbuild /t:Build /p:Configuration=Debug;Platform=Win32 cryptest.vcxproj</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <!-- DLL MAC'ing performed by cryptest.exe -->
   <ItemDefinitionGroup Label="DLL MAC">
     <PostBuildEvent>
       <Message>Adding MAC to DLL</Message>
-      <Command>
-        Win32\output\debug\cryptest.exe mac_dll "$(TargetPath)"
-        IF %ERRORLEVEL% EQU 0 (echo mac done &gt; "$(OutDir)"\cryptopp.mac.done)
-      </Command>
+      <Command>Win32\output\debug\cryptest.exe mac_dll "$(TargetPath)"
+IF %ERRORLEVEL% EQU 0 (echo mac done &gt; "$(OutDir)"\cryptopp.mac.done)</Command>
       <Inputs>%(Inputs)</Inputs>
       <Outputs>$(OutDir)cryptopp.mac.done;%(Outputs)</Outputs>
     </PostBuildEvent>

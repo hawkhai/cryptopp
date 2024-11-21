@@ -69,7 +69,7 @@
     <TargetName>cryptest</TargetName>
     <TargetExt>.exe</TargetExt>
     <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <!-- Intermediate and Output directories -->
@@ -91,15 +91,15 @@
     <ClCompile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ErrorReporting>None</ErrorReporting>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4231; 4251; 4275; 4355; 4505</DisableSpecificWarnings>
       <PrecompiledHeader />
       <PrecompiledHeadeFile />
-      <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>$(AdditionalOptions) /we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <ErrorReporting>NoErrorReport</ErrorReporting>
-      <AdditionalDependencies>cryptlib.lib</AdditionalDependencies>
+      <AdditionalDependencies>cryptlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(Platform)\Output\$(Configuration)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)\cryptlib.pdb</ProgramDatabaseFile>
@@ -110,32 +110,34 @@
   <!-- Debug Configurations -->
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='DLL-Import Debug'" Label="Debug Configuration">
     <ClCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_CRYPTEST_VCXPROJ;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalOptions>/we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_CRYPTEST_VCXPROJ;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <!-- Release Configurations -->
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release' Or '$(Configuration)'=='DLL-Import Release'" Label="Release Configuration">
     <ClCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;NOMINMAX;_CRYPTEST_VCXPROJ;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;NOMINMAX;_CRYPTEST_VCXPROJ;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
@@ -146,26 +148,29 @@
   <!-- DLL-Import Overrides for Preprocessor and Libraries -->
   <ItemDefinitionGroup Condition="'$(Configuration)'=='DLL-Import Debug'" Label="DLL Debug Configuration">
     <ClCompile>
-      <PreprocessorDefinitions>CRYPTOPP_IMPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_CRYPTEST_VCXPROJ;CRYPTOPP_IMPORTS;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(Platform)\DLL_Output\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>cryptopp.lib;cryptlib.lib</AdditionalDependencies>
+      <AdditionalDependencies>cryptlib.lib;cryptopp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='DLL-Import Release'" Label="DLL Debug Configuration">
     <ClCompile>
-      <PreprocessorDefinitions>NDEBUG;CRYPTOPP_IMPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;NOMINMAX;_CRYPTEST_VCXPROJ;CRYPTOPP_IMPORTS;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(Platform)\DLL_Output\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>cryptopp.lib;cryptlib.lib</AdditionalDependencies>
+      <AdditionalDependencies>cryptlib.lib;cryptopp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <!-- X86 Configurations -->
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'" Label="X86 Configuration">
     <ClCompile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/we4013 /we4047 /we4133 /we4172 /we4431 /we4456 /we4457 /we4477 /we4700 /we4715 /we4716 /we4723 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -181,14 +186,12 @@
   <!-- FIPS Validated Warning -->
   <ItemDefinitionGroup Label="FIPS Warning">
     <PreBuildEvent Condition="'$(Configuration)'=='DLL-Import Debug' Or '$(Configuration)'=='DLL-Import Release'">
-      <Command>
-        echo *************************************************************************
-        echo This configuration requires cryptopp.dll. You can build it yourself using
-        echo the cryptdll project, or obtain a pre-built, FIPS 140-2 validated DLL. If
-        echo you build it yourself the resulting DLL will not be considered FIPS
-        echo validated unless it undergoes the FIPS validation process.
-        echo *************************************************************************
-      </Command>
+      <Command>echo *************************************************************************
+echo This configuration requires cryptopp.dll. You can build it yourself using
+echo the cryptdll project, or obtain a pre-built, FIPS 140-2 validated DLL. If
+echo you build it yourself the resulting DLL will not be considered FIPS
+echo validated unless it undergoes the FIPS validation process.
+echo *************************************************************************</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <!-- Target for Appvoyer                           -->
